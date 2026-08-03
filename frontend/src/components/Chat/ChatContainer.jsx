@@ -9,27 +9,51 @@ function ChatContainer() {
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleSend = () => {
+  const handleSend = async () => {
     if (!input.trim()) return;
     
     // Add user message
-    const userMsg = { role: 'user', text: input };
+    const currentInput = input;
+    const userMsg = { role: 'user', text: currentInput };
     setMessages(prev => [...prev, userMsg]);
     setInput('');
     setIsLoading(true);
 
-    // Simulate API call and assistant response
-    setTimeout(() => {
+    try {
+      const apiUrl = import.meta.env.VITE_API_URL || '';
+      const response = await fetch(`${apiUrl}/api/query`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ query: currentInput, stream: false })
+      });
+
+      if (!response.ok) {
+        throw new Error('API request failed');
+      }
+
+      const data = await response.json();
+      
       const assistantMsg = {
         role: 'assistant',
-        text: 'For investments in the SBI Large Cap Fund (formerly Bluechip), an exit load of 1% is payable if units are redeemed or switched out within 1 year from the date of allotment. No exit load is levied for redemptions after 1 year.',
-        citationUrl: 'https://www.sbimf.com/sbimf-scheme-details/sbi-large-cap-fund-(formerly-known-as-sbi-bluechip-fund)-43',
-        citationText: 'Source: SBI Large Cap Fund Details',
-        lastUpdated: 'Oct 1, 2023'
+        text: data.response || 'Sorry, no response was generated.',
+        citationUrl: data.citation_url || '',
+        citationText: data.citation_url ? 'View Source Document' : '',
+        lastUpdated: data.last_updated && data.last_updated !== 'Unknown' ? data.last_updated : ''
       };
+      
       setMessages(prev => [...prev, assistantMsg]);
+    } catch (error) {
+      console.error("Failed to fetch response:", error);
+      const errorMsg = {
+        role: 'assistant',
+        text: `An error occurred while fetching the response: ${error.message}`
+      };
+      setMessages(prev => [...prev, errorMsg]);
+    } finally {
       setIsLoading(false);
-    }, 1500);
+    }
   };
 
   const handleSuggestionClick = (suggestion) => {

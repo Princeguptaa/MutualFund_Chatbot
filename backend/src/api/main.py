@@ -1,6 +1,7 @@
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import StreamingResponse
+from fastapi.responses import StreamingResponse, FileResponse
+from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 import sys
 import os
@@ -38,6 +39,7 @@ class FeedbackRequest(BaseModel):
     query: str
     response: str
     is_helpful: bool
+
 
 @app.get("/api/health")
 def health_check():
@@ -135,3 +137,14 @@ def process_query(req: QueryRequest):
             
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+# Serve the frontend
+ROOT_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
+FRONTEND_DIST = os.path.join(ROOT_DIR, "frontend", "dist")
+
+if os.path.exists(FRONTEND_DIST):
+    app.mount("/", StaticFiles(directory=FRONTEND_DIST, html=True), name="frontend")
+else:
+    @app.get("/")
+    def fallback_root():
+        return {"message": "Frontend build not found. Please build the React app. Go to /docs for API documentation."}
