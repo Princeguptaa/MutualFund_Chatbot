@@ -16,14 +16,13 @@ function CitationCard({ text, citationUrl, citationText, lastUpdated }) {
         <div className="custom-shadow body-md relative" style={{ 
           backgroundColor: 'var(--surface-container-lowest)', 
           border: '1px solid var(--outline-variant)', 
+          borderLeft: '4px solid var(--secondary)',
           color: 'var(--on-surface)', 
           padding: 'var(--spacing-md) var(--spacing-lg)', 
           borderRadius: 'var(--rounded-lg)', 
           borderBottomLeftRadius: '0',
           overflow: 'hidden'
         }}>
-          {/* Left Accent */}
-          <div className="absolute top-0 bottom-0 left-0" style={{ width: '4px', backgroundColor: 'var(--secondary)' }}></div>
           
           <p style={{ marginBottom: 'var(--spacing-md)' }}>{text}</p>
           
