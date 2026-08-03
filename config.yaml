@@ -1,0 +1,7 @@
+embedding_model: "all-MiniLM-L6-v2"
+chroma_persist_directory: "data/vectorstore/"
+chunk_size: 300
+chunk_overlap: 50
+similarity_threshold: 0.65
+top_k: 5
+source_registry_path: "data/sources.json"

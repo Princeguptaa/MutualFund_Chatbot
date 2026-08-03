@@ -1,0 +1,42 @@
+[
+  {
+    "url": "https://www.sbimf.com/sbimf-scheme-details/sbi-large-cap-fund-(formerly-known-as-sbi-bluechip-fund)-43",
+    "doc_type": "scheme_page",
+    "schemes": ["SBI Large Cap Fund", "SBI Bluechip Fund"],
+    "last_verified": "2026-08-03",
+    "refresh_frequency": "monthly",
+    "status": "active"
+  },
+  {
+    "url": "https://www.sbimf.com/sbimf-scheme-details/sbi-flexicap-fund-39",
+    "doc_type": "scheme_page",
+    "schemes": ["SBI Flexicap Fund"],
+    "last_verified": "2026-08-03",
+    "refresh_frequency": "monthly",
+    "status": "active"
+  },
+  {
+    "url": "https://www.sbimf.com/sbimf-scheme-details/sbi-elss-tax-saver-fund-(formerly-known-as-sbi-long-term-equity-fund)-3",
+    "doc_type": "scheme_page",
+    "schemes": ["SBI ELSS Tax Saver Fund", "SBI Long Term Equity Fund"],
+    "last_verified": "2026-08-03",
+    "refresh_frequency": "monthly",
+    "status": "active"
+  },
+  {
+    "url": "https://www.sbimf.com/sbimf-scheme-details/sbi-small-cap-fund-329",
+    "doc_type": "scheme_page",
+    "schemes": ["SBI Small Cap Fund"],
+    "last_verified": "2026-08-03",
+    "refresh_frequency": "monthly",
+    "status": "active"
+  },
+  {
+    "url": "https://groww.in/mutual-funds/nippon-india-small-cap-fund-direct-growth",
+    "doc_type": "scheme_page",
+    "schemes": ["Nippon India Small Cap Fund"],
+    "last_verified": "2026-08-03",
+    "refresh_frequency": "monthly",
+    "status": "active"
+  }
+]
