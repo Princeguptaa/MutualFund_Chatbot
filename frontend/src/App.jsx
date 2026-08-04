@@ -11,7 +11,7 @@ function App() {
         {/* Header Title Area */}
         <div className="flex flex-col items-center justify-center text-center" style={{ marginBottom: 'var(--spacing-xl)' }}>
           <h1 className="headline-lg" style={{ color: 'var(--primary)', marginBottom: 'var(--spacing-sm)' }}>
-            Mutual Fund FAQ Assistant
+            GrowwAI Assistant
           </h1>
           <span className="inline-flex items-center label-md" style={{ gap: 'var(--spacing-xs)', padding: 'var(--spacing-sm) var(--spacing-md)', backgroundColor: 'var(--surface-container-low)', border: '1px solid var(--outline-variant)', borderRadius: 'var(--rounded-full)', color: 'var(--on-surface-variant)' }}>
             <span className="material-symbols-outlined" style={{ fontSize: '16px' }}>info</span>

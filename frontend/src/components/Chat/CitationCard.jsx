@@ -6,10 +6,10 @@ function CitationCard({ text, citationUrl, citationText, lastUpdated }) {
       <div className="flex flex-col max-w-[90%]" style={{ gap: 'var(--spacing-sm)' }}>
         {/* Avatar / Name */}
         <div className="flex items-center" style={{ gap: 'var(--spacing-sm)', marginBottom: 'var(--spacing-xs)' }}>
-          <div style={{ width: '32px', height: '32px', borderRadius: 'var(--rounded-full)', backgroundColor: 'var(--surface-container-high)', border: '1px solid var(--outline-variant)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <span className="material-symbols-outlined" style={{ color: 'var(--on-surface-variant)', fontSize: '18px' }}>smart_toy</span>
+          <div style={{ width: '32px', height: '32px', borderRadius: 'var(--rounded-full)', backgroundColor: 'var(--surface-container-high)', border: '1px solid var(--outline-variant)', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}>
+            <img src="/assistant_avatar.png" alt="GrowwAI Avatar" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
           </div>
-          <span className="label-sm uppercase tracking-wider" style={{ color: 'var(--on-surface-variant)' }}>Assistant</span>
+          <span className="label-sm uppercase tracking-wider" style={{ color: 'var(--on-surface-variant)' }}>GrowwAI Assistant</span>
         </div>
         
         {/* Message Body */}

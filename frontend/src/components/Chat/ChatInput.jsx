@@ -23,7 +23,12 @@ function ChatInput({ input, setInput, onSubmit, disabled }) {
     <div className="fixed bottom-0 w-full z-40 glass-panel" style={{ backgroundColor: 'var(--surface-container-lowest)', borderTop: '1px solid var(--outline-variant)', padding: 'var(--spacing-md) var(--spacing-margin)', left: 0 }}>
       <div className="flex flex-col max-w-4xl mx-auto w-full">
         <label htmlFor="chat-input" className="sr-only label-md" style={{ color: 'var(--on-surface)', marginBottom: 'var(--spacing-xs)' }}>Ask a question</label>
-        <div className="relative flex items-end w-full">
+        <div className="relative flex items-end w-full custom-shadow" style={{
+          backgroundColor: 'var(--surface)',
+          border: '1px solid var(--outline-variant)',
+          borderRadius: 'var(--rounded-lg)',
+          padding: '4px',
+        }}>
           <textarea
             id="chat-input"
             ref={textareaRef}
@@ -33,16 +38,14 @@ function ChatInput({ input, setInput, onSubmit, disabled }) {
             disabled={disabled}
             placeholder="Ask about a fund..."
             rows={1}
-            className="w-full body-md custom-shadow"
+            className="w-full body-md"
             style={{ 
-              backgroundColor: 'var(--surface)', 
-              border: '1px solid var(--outline-variant)', 
-              borderRadius: 'var(--rounded-lg)', 
-              padding: 'var(--spacing-md)', 
-              paddingRight: '64px', 
+              backgroundColor: 'transparent', 
+              border: 'none', 
+              padding: '12px', 
               resize: 'none', 
               color: 'var(--on-surface)', 
-              minHeight: '56px', 
+              minHeight: '48px', 
               maxHeight: '120px',
               fontFamily: 'inherit',
               outline: 'none'
@@ -51,21 +54,22 @@ function ChatInput({ input, setInput, onSubmit, disabled }) {
           <button 
             onClick={onSubmit}
             disabled={!input.trim() || disabled}
-            className="absolute"
+            className="shrink-0"
             style={{ 
-              right: 'var(--spacing-sm)', 
-              bottom: 'var(--spacing-sm)', 
-              padding: 'var(--spacing-sm)', 
+              margin: '4px',
+              padding: '8px 16px', 
               backgroundColor: 'var(--primary)', 
               color: 'var(--on-primary)', 
               borderRadius: 'var(--rounded-md)', 
               display: 'flex', 
               alignItems: 'center', 
               justifyContent: 'center',
+              height: '40px',
               opacity: (!input.trim() || disabled) ? 0.5 : 1,
-              cursor: (!input.trim() || disabled) ? 'not-allowed' : 'pointer'
+              cursor: (!input.trim() || disabled) ? 'not-allowed' : 'pointer',
+              border: 'none'
             }}>
-            <span className="material-symbols-outlined" style={{ fontVariationSettings: "'FILL' 1" }}>send</span>
+            <span className="material-symbols-outlined" style={{ fontVariationSettings: "'FILL' 1", fontSize: '20px' }}>send</span>
           </button>
         </div>
         <div className="text-center" style={{ marginTop: 'var(--spacing-xs)' }}>
