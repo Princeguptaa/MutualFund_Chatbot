@@ -100,7 +100,7 @@ def process_query(req: QueryRequest):
         resolved_chunks = resolve_conflicts(chunks)
         
         # 6. Build Prompt
-        prompt = build_prompt(normalized_query, resolved_chunks)
+        prompt = build_prompt(normalized_query, resolved_chunks, scheme_name)
 
         metadata = resolved_chunks[0].get("metadata", {})
         citation_url = metadata.get("source_url", "")

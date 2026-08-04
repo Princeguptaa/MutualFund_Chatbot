@@ -82,9 +82,15 @@ if query or "example_query" in st.session_state:
             response = performance_refusal()
             log_event("refusal_served", {"refusal_type": "performance"})
         else:
+            if "current_scheme" not in st.session_state:
+                st.session_state.current_scheme = None
+
             # 3. Preprocess
-            normalized_query, scheme_name, clarification = preprocess_query(query)
+            normalized_query, scheme_name, clarification = preprocess_query(query, st.session_state.current_scheme)
             
+            if scheme_name:
+                st.session_state.current_scheme = scheme_name
+
             if clarification:
                 response = clarification
                 log_event("refusal_served", {"refusal_type": "clarification_needed"})
@@ -101,7 +107,7 @@ if query or "example_query" in st.session_state:
                         resolved_chunks = resolve_conflicts(chunks)
                         
                         # 6. Build Prompt
-                        prompt = build_prompt(normalized_query, resolved_chunks)
+                        prompt = build_prompt(normalized_query, resolved_chunks, scheme_name)
                         
                         # 7. Generate Answer (Streaming)
                         try:

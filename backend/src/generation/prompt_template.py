@@ -1,6 +1,6 @@
 from typing import List, Dict, Any
 
-def build_prompt(query: str, retrieved_chunks: List[Dict[str, Any]]) -> str:
+def build_prompt(query: str, retrieved_chunks: List[Dict[str, Any]], scheme_name: str = None) -> str:
     """
     Constructs the prompt containing the system constraints, context, and user query.
     """
@@ -16,7 +16,8 @@ def build_prompt(query: str, retrieved_chunks: List[Dict[str, Any]]) -> str:
     context_text = ""
     for i, chunk in enumerate(retrieved_chunks):
         source = chunk.get('metadata', {}).get('source_url', 'Unknown')
-        context_text += f"\n--- Context {i+1} (Source: {source}) ---\n{chunk['text']}\n"
+        scheme_prefix = f"Scheme: {scheme_name}\n" if scheme_name else ""
+        context_text += f"\n--- Context {i+1} (Source: {source}) ---\n{scheme_prefix}{chunk['text']}\n"
         
     prompt = f"{system_prompt}\n\nContext:{context_text}\n\nUser Query: {query}\n\nAnswer:"
     return prompt

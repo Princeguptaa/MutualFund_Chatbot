@@ -99,3 +99,17 @@
 {"event_type": "answer_served", "timestamp": "2026-08-04T08:09:05.731339", "scheme_name": "SBI Small Cap Fund", "citation_url": "https://www.sbimf.com/sbimf-scheme-details/sbi-small-cap-fund-329", "retrieval_distance": 0.48843564377777293}
 {"event_type": "query_received", "timestamp": "2026-08-04T08:09:34.093552", "intent": "FACTUAL", "query_length": 49}
 {"event_type": "answer_served", "timestamp": "2026-08-04T08:09:34.322936", "scheme_name": "SBI Small Cap Fund", "citation_url": "https://www.sbimf.com/sbimf-scheme-details/sbi-small-cap-fund-329", "retrieval_distance": 0.48843564377777293}
+{"event_type": "pii_blocked", "timestamp": "2026-08-04T17:32:19.107890", "pii_type": "PAN", "query_length": 43}
+{"event_type": "query_received", "timestamp": "2026-08-04T17:32:22.015209", "intent": "PERFORMANCE_COMPARISON", "query_length": 30}
+{"event_type": "refusal_served", "timestamp": "2026-08-04T17:32:22.017301", "refusal_type": "performance"}
+{"event_type": "query_received", "timestamp": "2026-08-04T17:32:22.821095", "intent": "FACTUAL", "query_length": 22}
+{"event_type": "refusal_served", "timestamp": "2026-08-04T17:32:22.821752", "refusal_type": "clarification_needed"}
+{"event_type": "query_received", "timestamp": "2026-08-04T17:32:23.644254", "intent": "FACTUAL", "query_length": 53}
+{"event_type": "answer_served", "timestamp": "2026-08-04T17:32:24.802626", "scheme_name": "Nippon India Small Cap Fund", "citation_url": "https://groww.in/mutual-funds/nippon-india-small-cap-fund-direct-growth", "retrieval_distance": 0.5619710187201006}
+{"event_type": "pii_blocked", "timestamp": "2026-08-04T17:34:20.500080", "pii_type": "PAN", "query_length": 43}
+{"event_type": "query_received", "timestamp": "2026-08-04T17:34:22.119533", "intent": "PERFORMANCE_COMPARISON", "query_length": 30}
+{"event_type": "refusal_served", "timestamp": "2026-08-04T17:34:22.120903", "refusal_type": "performance"}
+{"event_type": "query_received", "timestamp": "2026-08-04T17:34:23.231201", "intent": "FACTUAL", "query_length": 22}
+{"event_type": "refusal_served", "timestamp": "2026-08-04T17:34:23.232786", "refusal_type": "clarification_needed"}
+{"event_type": "query_received", "timestamp": "2026-08-04T17:34:24.201623", "intent": "FACTUAL", "query_length": 53}
+{"event_type": "answer_served", "timestamp": "2026-08-04T17:34:24.635584", "scheme_name": "Nippon India Small Cap Fund", "citation_url": "https://groww.in/mutual-funds/nippon-india-small-cap-fund-direct-growth", "retrieval_distance": 0.5619710187201006}
