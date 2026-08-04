@@ -20,7 +20,7 @@ function ChatInput({ input, setInput, onSubmit, disabled }) {
   };
 
   return (
-    <div className="fixed bottom-0 w-full z-40" style={{ backgroundColor: 'var(--surface-container-lowest)', borderTop: '1px solid var(--outline-variant)', padding: 'var(--spacing-md) var(--spacing-margin)', boxShadow: '0 -4px 6px -1px rgba(30,58,138,0.05)', left: 0 }}>
+    <div className="fixed bottom-0 w-full z-40 glass-panel" style={{ backgroundColor: 'var(--surface-container-lowest)', borderTop: '1px solid var(--outline-variant)', padding: 'var(--spacing-md) var(--spacing-margin)', left: 0 }}>
       <div className="flex flex-col max-w-4xl mx-auto w-full">
         <label htmlFor="chat-input" className="sr-only label-md" style={{ color: 'var(--on-surface)', marginBottom: 'var(--spacing-xs)' }}>Ask a question</label>
         <div className="relative flex items-end w-full">

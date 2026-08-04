@@ -2,63 +2,63 @@
 @import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200');
 
 :root {
-  /* Colors */
-  --surface: #f8f9fa;
-  --surface-dim: #d9dadb;
-  --surface-bright: #f8f9fa;
-  --surface-container-lowest: #ffffff;
-  --surface-container-low: #f3f4f5;
-  --surface-container: #edeeef;
-  --surface-container-high: #e7e8e9;
-  --surface-container-highest: #e1e3e4;
+  /* Colors - Modern Dark Theme */
+  --surface: #1e1e24;
+  --surface-dim: #18181d;
+  --surface-bright: #27272f;
+  --surface-container-lowest: #0b0b0e;
+  --surface-container-low: #121217;
+  --surface-container: #17171d;
+  --surface-container-high: #1c1c23;
+  --surface-container-highest: #23232b;
   
-  --on-surface: #191c1d;
-  --on-surface-variant: #444651;
-  --inverse-surface: #2e3132;
-  --inverse-on-surface: #f0f1f2;
-  --outline: #757682;
-  --outline-variant: #c5c5d3;
-  --surface-tint: #4059aa;
+  --on-surface: #e2e8f0;
+  --on-surface-variant: #94a3b8;
+  --inverse-surface: #f1f5f9;
+  --inverse-on-surface: #0f172a;
+  --outline: #475569;
+  --outline-variant: #334155;
+  --surface-tint: #3b82f6;
   
-  --primary: #00236f;
+  --primary: #3b82f6;
   --on-primary: #ffffff;
   --primary-container: #1e3a8a;
-  --on-primary-container: #90a8ff;
-  --inverse-primary: #b6c4ff;
+  --on-primary-container: #dbeafe;
+  --inverse-primary: #93c5fd;
   
-  --secondary: #006c49;
+  --secondary: #10b981;
   --on-secondary: #ffffff;
-  --secondary-container: #6cf8bb;
-  --on-secondary-container: #00714d;
+  --secondary-container: #064e3b;
+  --on-secondary-container: #d1fae5;
   
-  --tertiary: #4b1c00;
+  --tertiary: #8b5cf6;
   --on-tertiary: #ffffff;
-  --tertiary-container: #6e2c00;
-  --on-tertiary-container: #f39461;
+  --tertiary-container: #4c1d95;
+  --on-tertiary-container: #ede9fe;
   
-  --error: #ba1a1a;
+  --error: #ef4444;
   --on-error: #ffffff;
-  --error-container: #ffdad6;
-  --on-error-container: #93000a;
+  --error-container: #7f1d1d;
+  --on-error-container: #fee2e2;
   
-  --primary-fixed: #dce1ff;
-  --primary-fixed-dim: #b6c4ff;
-  --on-primary-fixed: #00164e;
-  --on-primary-fixed-variant: #264191;
+  --primary-fixed: #dbeafe;
+  --primary-fixed-dim: #bfdbfe;
+  --on-primary-fixed: #1e3a8a;
+  --on-primary-fixed-variant: #1d4ed8;
   
-  --secondary-fixed: #6ffbbe;
-  --secondary-fixed-dim: #4edea3;
-  --on-secondary-fixed: #002113;
-  --on-secondary-fixed-variant: #005236;
+  --secondary-fixed: #d1fae5;
+  --secondary-fixed-dim: #a7f3d0;
+  --on-secondary-fixed: #064e3b;
+  --on-secondary-fixed-variant: #047857;
   
-  --tertiary-fixed: #ffdbcb;
-  --tertiary-fixed-dim: #ffb691;
-  --on-tertiary-fixed: #341100;
-  --on-tertiary-fixed-variant: #773205;
+  --tertiary-fixed: #ede9fe;
+  --tertiary-fixed-dim: #ddd6fe;
+  --on-tertiary-fixed: #4c1d95;
+  --on-tertiary-fixed-variant: #6d28d9;
   
-  --background: #f8f9fa;
-  --on-background: #191c1d;
-  --surface-variant: #e1e3e4;
+  --background: #0b0b0e;
+  --on-background: #f8fafc;
+  --surface-variant: #1e1e24;
 
   /* Spacing */
   --spacing-base: 4px;
@@ -156,13 +156,25 @@ body {
 
 /* Shadows (from code.html & DESIGN.md) */
 .custom-shadow { 
-  box-shadow: 0 4px 6px -1px rgba(30, 58, 138, 0.08), 0 2px 4px -1px rgba(30, 58, 138, 0.08); 
+  box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.4), 0 0 3px rgba(255, 255, 255, 0.05); 
+}
+.hover-shadow {
+  transition: all 0.3s ease;
 }
 .hover-shadow:hover { 
-  box-shadow: 0 10px 15px -3px rgba(30, 58, 138, 0.08), 0 4px 6px -2px rgba(30, 58, 138, 0.08); 
+  box-shadow: 0 10px 25px -3px rgba(0, 0, 0, 0.5), 0 0 5px rgba(255, 255, 255, 0.08); 
+  transform: translateY(-2px);
 }
 .ambient-shadow { 
-  box-shadow: 0 0 20px rgba(30, 58, 138, 0.05); 
+  box-shadow: 0 0 30px rgba(59, 130, 246, 0.15); 
+}
+
+/* Glassmorphism */
+.glass-panel {
+  background: rgba(30, 30, 36, 0.6);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 /* Animations */
@@ -171,7 +183,7 @@ body {
   100% { background-position: 200% 0; }
 }
 .skeleton {
-  background: linear-gradient(90deg, #f0f1f2 25%, #e1e3e4 50%, #f0f1f2 75%);
+  background: linear-gradient(90deg, var(--surface-container) 25%, var(--surface-container-high) 50%, var(--surface-container) 75%);
   background-size: 200% 100%;
   animation: shimmer 1.5s infinite;
 }
