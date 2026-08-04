@@ -5,6 +5,7 @@ import os
 import asyncio
 from typing import List, Dict, Any
 
+from playwright.async_api import async_playwright, BrowserContext
 from src.ingestion.document_fetcher import fetch_html_async
 from src.ingestion.html_parser import extract_text
 from src.ingestion.chunker import chunk_text
@@ -16,13 +17,16 @@ def load_sources(filepath: str) -> List[Dict[str, Any]]:
 
 fallback_data = []
 
-async def process_source(source, collection, chunk_size, chunk_overlap, semaphore):
+async def process_source(source, collection, chunk_size, chunk_overlap, semaphore, browser_context: BrowserContext):
     async with semaphore:
         url = source["url"]
         print(f"Processing URL: {url}")
         
+        page = await browser_context.new_page()
         # 1. Fetch
-        html = await fetch_html_async(url)
+        html = await fetch_html_async(url, page=page)
+        await page.close()
+        
         if not html:
             print(f"Failed to fetch {url}. Skipping.")
             return
@@ -59,9 +63,6 @@ async def process_source(source, collection, chunk_size, chunk_overlap, semaphor
             
         # 5. Upsert to ChromaDB
         if ids:
-            # Upsert operations in Chroma are synchronous and thread-safe.
-            # Running this in thread executor for truly async behavior or just call it if it's fast enough.
-            # Using basic sync call here as it's local sqlite chroma in MVP.
             try:
                 collection.upsert(
                     ids=ids,
@@ -98,10 +99,15 @@ async def run_ingestion():
     
     print(f"Loaded {len(sources)} sources for ingestion.")
     
-    semaphore = asyncio.Semaphore(5) # limit concurrent requests to 5
-    tasks = [process_source(source, collection, chunk_size, chunk_overlap, semaphore) for source in sources]
-    
-    await asyncio.gather(*tasks)
+    async with async_playwright() as p:
+        browser = await p.chromium.launch(headless=True)
+        browser_context = await browser.new_context(user_agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36")
+        
+        semaphore = asyncio.Semaphore(5) # limit concurrent requests to 5
+        tasks = [process_source(source, collection, chunk_size, chunk_overlap, semaphore, browser_context) for source in sources]
+        
+        await asyncio.gather(*tasks)
+        await browser.close()
     
     fallback_path = os.path.join(base_dir, "data", "fallback_docs.json")
     with open(fallback_path, 'w', encoding='utf-8') as f:

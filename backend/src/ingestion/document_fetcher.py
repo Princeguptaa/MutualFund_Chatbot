@@ -1,19 +1,20 @@
-import httpx
 from typing import Optional
+from playwright.async_api import Page, Error as PlaywrightError
 
-async def fetch_html_async(url: str, timeout: int = 10) -> Optional[str]:
+async def fetch_html_async(url: str, page: Page, timeout: int = 15000) -> Optional[str]:
     """
-    Fetches the HTML content from the given URL asynchronously.
+    Fetches the fully-rendered HTML content from the given URL using Playwright.
     Returns the HTML text if successful, else None.
     """
-    async with httpx.AsyncClient() as client:
-        try:
-            response = await client.get(url, timeout=timeout, follow_redirects=True)
-            response.raise_for_status()
-            return response.text
-        except httpx.RequestError as e:
-            print(f"Request error for {url}: {e}")
-            return None
-        except httpx.HTTPStatusError as e:
-            print(f"HTTP error {e.response.status_code} for {url}: {e}")
-            return None
+    try:
+        await page.goto(url, timeout=timeout, wait_until="networkidle")
+        # Give it a tiny extra sleep to ensure React/JS finishes rendering numbers
+        await page.wait_for_timeout(2000)
+        content = await page.content()
+        return content
+    except PlaywrightError as e:
+        print(f"Playwright error for {url}: {e}")
+        return None
+    except Exception as e:
+        print(f"Unexpected error for {url}: {e}")
+        return None
