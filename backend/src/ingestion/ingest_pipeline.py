@@ -103,7 +103,7 @@ async def run_ingestion():
         browser = await p.chromium.launch(headless=True)
         browser_context = await browser.new_context(user_agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36")
         
-        semaphore = asyncio.Semaphore(5) # limit concurrent requests to 5
+        semaphore = asyncio.Semaphore(1) # limit concurrent requests to 1
         tasks = [process_source(source, collection, chunk_size, chunk_overlap, semaphore, browser_context) for source in sources]
         
         await asyncio.gather(*tasks)
