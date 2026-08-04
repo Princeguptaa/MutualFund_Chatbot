@@ -79,7 +79,7 @@ def retrieve(query: str, scheme_name: str = None, top_k: int = 3) -> List[Dict[s
                 break
                 
             score = similarities[idx]
-            if score < 0.35: # Stricter threshold
+            if score < 0.10: # Lower threshold to accommodate rewritten queries
                 continue
                 
             chunk_info = _chunk_mapping[idx]

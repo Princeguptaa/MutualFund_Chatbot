@@ -56,7 +56,7 @@ def classify_intent(query: str) -> Intent:
         
     client = Groq(api_key=api_key)
     prompt = f"""Classify this user query into exactly one of these categories:
-FACTUAL: Seeking information, facts, procedures, definitions, or status.
+FACTUAL: Seeking information, facts, procedures, definitions, minimum investment amounts (like SIP/lumpsum), NAV, exit load, or status.
 ADVISORY_OPINION: Asking for investment advice, recommendations, opinions on whether to buy/sell/hold, or which fund is "good" or "best".
 PERFORMANCE_COMPARISON: Asking to compare returns, CAGR, or historical performance between funds.
 
