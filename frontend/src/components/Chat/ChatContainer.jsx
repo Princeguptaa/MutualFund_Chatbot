@@ -20,13 +20,16 @@ function ChatContainer() {
     setIsLoading(true);
 
     try {
+      // Format history, taking only role and text
+      const history = messages.map(m => ({ role: m.role, text: m.text }));
+
       const apiUrl = import.meta.env.VITE_API_URL || '';
       const response = await fetch(`${apiUrl}/api/query`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ query: currentInput, stream: false })
+        body: JSON.stringify({ query: currentInput, stream: false, history: history })
       });
 
       if (!response.ok) {

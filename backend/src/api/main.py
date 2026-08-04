@@ -19,6 +19,7 @@ from src.retrieval.conflict_resolver import resolve_conflicts
 from src.generation.prompt_template import build_prompt
 from src.generation.generator import generate_answer_stream, generate_answer
 from src.generation.response_formatter import format_response
+from src.generation.query_rewriter import rewrite_query
 from src.feedback.analytics import log_event
 
 app = FastAPI(title="Mutual Fund FAQ Assistant API")
@@ -34,6 +35,7 @@ app.add_middleware(
 class QueryRequest(BaseModel):
     query: str
     stream: bool = False
+    history: list[dict] = []
 
 class FeedbackRequest(BaseModel):
     query: str
@@ -62,6 +64,10 @@ def process_query(req: QueryRequest):
     if pii_match:
         log_event("pii_blocked", {"pii_type": pii_match.pii_type, "query_length": len(query)})
         return {"response": pii_rejection(), "status": "blocked"}
+
+    # 1.5. Query Rewriting (Contextualization)
+    if req.history:
+        query = rewrite_query(query, req.history)
 
     # 2. Intent Classification
     intent = classify_intent(query)
