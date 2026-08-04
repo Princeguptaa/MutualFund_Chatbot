@@ -17,7 +17,8 @@ def preprocess_query(query: str) -> Tuple[str, Optional[str], Optional[str]]:
             
     # Edge-case: Ambiguity
     if not detected_scheme:
-        if any(term in query_lower for term in ["sip", "nav", "exit load", "expense ratio", "fund manager"]):
+        ambiguous_terms = ["nav of", "expense ratio of", "exit load for", "fund manager of", "return of"]
+        if any(term in query_lower for term in ambiguous_terms):
             return query, None, "Could you please specify which mutual fund you want this information for?"
         
     return query, detected_scheme, None

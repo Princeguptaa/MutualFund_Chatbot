@@ -55,7 +55,14 @@ def classify_intent(query: str) -> Intent:
         return classify_intent_heuristic(query)
         
     client = Groq(api_key=api_key)
-    prompt = f"Classify this query into exactly one: FACTUAL, ADVISORY_OPINION, PERFORMANCE_COMPARISON.\nReply with ONLY the word.\n\nQuery: {query}\nIntent:"
+    prompt = f"""Classify this user query into exactly one of these categories:
+FACTUAL: Seeking information, facts, procedures, definitions, or status.
+ADVISORY_OPINION: Asking for investment advice, recommendations, opinions on whether to buy/sell/hold, or which fund is "good" or "best".
+PERFORMANCE_COMPARISON: Asking to compare returns, CAGR, or historical performance between funds.
+
+Reply with ONLY the exact category name.
+Query: {query}
+Intent:"""
 
     try:
         chat = client.chat.completions.create(
