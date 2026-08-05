@@ -9,7 +9,7 @@ def retrieve(query: str, scheme_name: str = None, top_k: int = 3) -> List[Dict[s
     Retrieves the most relevant chunks using TF-IDF and Cosine Similarity.
     """
     try:
-        base_dir = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
+        base_dir = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
         store_path = os.path.join(base_dir, "data", "vectorstore", "tfidf_store.pkl")
         
         if not os.path.exists(store_path):

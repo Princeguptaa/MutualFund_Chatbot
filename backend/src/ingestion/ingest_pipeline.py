@@ -60,7 +60,7 @@ async def run_ingestion():
     config = get_config()
     sources_file = config.get("source_registry_path", "data/sources.json")
     
-    base_dir = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
+    base_dir = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
     sources_file = os.path.join(base_dir, sources_file)
     
     sources = load_sources(sources_file)

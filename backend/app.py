@@ -43,7 +43,8 @@ if col3.button("Download capital gains statement?"):
 
 # Display chat messages from history on app rerun
 for message in st.session_state.messages:
-    with st.chat_message(message["role"]):
+    avatar_url = "https://upload.wikimedia.org/wikipedia/commons/4/4b/Groww_app_logo.png" if message["role"] == "assistant" else None
+    with st.chat_message(message["role"], avatar=avatar_url):
         st.markdown(message["content"])
 
 # React to user input
@@ -115,7 +116,7 @@ if query or "example_query" in st.session_state:
                             raw_answer = ""
                             
                             # stream display
-                            with st.chat_message("assistant"):
+                            with st.chat_message("assistant", avatar="https://upload.wikimedia.org/wikipedia/commons/4/4b/Groww_app_logo.png"):
                                 response_placeholder = st.empty()
                                 for chunk in stream:
                                     raw_answer += chunk
@@ -140,7 +141,7 @@ if query or "example_query" in st.session_state:
 
     # Display assistant response in chat message container if not streamed
     if not locals().get("skip_display", False):
-        with st.chat_message("assistant"):
+        with st.chat_message("assistant", avatar="https://upload.wikimedia.org/wikipedia/commons/4/4b/Groww_app_logo.png"):
             st.markdown(response)
             
     # Add assistant response to chat history
