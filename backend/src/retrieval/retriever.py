@@ -3,6 +3,7 @@ import json
 import os
 import pickle
 from sklearn.metrics.pairwise import cosine_similarity
+import streamlit as st
 
 def retrieve(query: str, scheme_name: str = None, top_k: int = 10) -> List[Dict[str, Any]]:
     """
@@ -13,6 +14,7 @@ def retrieve(query: str, scheme_name: str = None, top_k: int = 10) -> List[Dict[
         store_path = os.path.join(base_dir, "data", "vectorstore", "tfidf_store.pkl")
         
         if not os.path.exists(store_path):
+            st.error(f"TF-IDF store not found at {store_path}. Please run ingest_pipeline.py")
             print("TF-IDF store not found. Please run ingest_pipeline.py")
             return []
             
@@ -34,6 +36,7 @@ def retrieve(query: str, scheme_name: str = None, top_k: int = 10) -> List[Dict[
                             valid_urls.append(s["url"])
                             
             if not valid_urls:
+                st.error(f"Scheme '{scheme_name}' not found in sources.json at {sources_path}.")
                 # Scheme was parsed, but not in our sources.json! Out of scope.
                 return []
                 
@@ -62,6 +65,7 @@ def retrieve(query: str, scheme_name: str = None, top_k: int = 10) -> List[Dict[
         return scored_chunks[:top_k]
         
     except Exception as e:
+        st.error(f"Retrieval failed with exception: {str(e)}")
         print(f"Retrieval failed: {e}")
         return []
 
