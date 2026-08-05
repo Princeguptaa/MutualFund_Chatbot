@@ -1,20 +1,31 @@
 from typing import List, Dict, Any
 import json
 import os
-from src.vectorstore.chroma_client import get_chroma_client, get_collection
+import pickle
+from sklearn.metrics.pairwise import cosine_similarity
 
 def retrieve(query: str, scheme_name: str = None, top_k: int = 3) -> List[Dict[str, Any]]:
     """
-    Retrieves the most relevant chunks using ChromaDB.
+    Retrieves the most relevant chunks using TF-IDF and Cosine Similarity.
     """
     try:
-        client = get_chroma_client()
-        collection = get_collection(client)
+        base_dir = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
+        store_path = os.path.join(base_dir, "data", "vectorstore", "tfidf_store.pkl")
         
-        where_filter = None
+        if not os.path.exists(store_path):
+            print("TF-IDF store not found. Please run ingest_pipeline.py")
+            return []
+            
+        with open(store_path, "rb") as f:
+            store_data = pickle.load(f)
+            
+        vectorizer = store_data["vectorizer"]
+        tfidf_matrix = store_data["tfidf_matrix"]
+        chunks = store_data["chunks"]
+        
+        valid_urls = []
         if scheme_name and scheme_name.lower() != "unknown":
-            valid_urls = []
-            sources_path = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), "data", "sources.json")
+            sources_path = os.path.join(base_dir, "data", "sources.json")
             if os.path.exists(sources_path):
                 with open(sources_path, 'r', encoding='utf-8') as f:
                     sources_data = json.load(f)
@@ -25,33 +36,31 @@ def retrieve(query: str, scheme_name: str = None, top_k: int = 3) -> List[Dict[s
             if not valid_urls:
                 # Scheme was parsed, but not in our sources.json! Out of scope.
                 return []
-            
-            # If multiple URLs match, we can use $in operator
-            if len(valid_urls) == 1:
-                where_filter = {"source_url": valid_urls[0]}
-            elif len(valid_urls) > 1:
-                where_filter = {"source_url": {"$in": valid_urls}}
                 
-        results = collection.query(
-            query_texts=[query],
-            n_results=top_k,
-            where=where_filter
-        )
+        # Compute similarities
+        query_vec = vectorizer.transform([query])
+        similarities = cosine_similarity(query_vec, tfidf_matrix).flatten()
         
-        retrieved_chunks = []
-        if results and results.get("documents") and results["documents"][0]:
-            for i in range(len(results["documents"][0])):
-                doc_text = results["documents"][0][i]
-                metadata = results["metadatas"][0][i] if results.get("metadatas") else {}
-                distance = results["distances"][0][i] if results.get("distances") else 0.0
-                
-                retrieved_chunks.append({
-                    "text": doc_text,
-                    "metadata": metadata,
-                    "distance": distance
+        # Filter and sort
+        scored_chunks = []
+        for i, score in enumerate(similarities):
+            # Only consider chunks with a non-zero similarity
+            if score > 0:
+                chunk = chunks[i]
+                if valid_urls:
+                    if chunk["metadata"].get("source_url") not in valid_urls:
+                        continue
+                        
+                scored_chunks.append({
+                    "text": chunk["text"],
+                    "metadata": chunk["metadata"],
+                    "distance": 1.0 - score  # 0 distance = exact match
                 })
                 
-        return retrieved_chunks
+        # Sort by distance (lowest first, which means highest similarity)
+        scored_chunks.sort(key=lambda x: x["distance"])
+        return scored_chunks[:top_k]
+        
     except Exception as e:
         print(f"Retrieval failed: {e}")
         return []
