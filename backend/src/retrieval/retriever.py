@@ -4,7 +4,7 @@ import os
 import pickle
 from sklearn.metrics.pairwise import cosine_similarity
 
-def retrieve(query: str, scheme_name: str = None, top_k: int = 3) -> List[Dict[str, Any]]:
+def retrieve(query: str, scheme_name: str = None, top_k: int = 10) -> List[Dict[str, Any]]:
     """
     Retrieves the most relevant chunks using TF-IDF and Cosine Similarity.
     """

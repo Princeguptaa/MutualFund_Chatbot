@@ -10,14 +10,18 @@ def extract_text(html_content: str) -> Optional[str]:
     if not html_content:
         return None
         
-    text = trafilatura.extract(html_content, include_comments=False, include_tables=True, no_fallback=False)
+    # Use BeautifulSoup as primary to avoid stripping important financial numbers/tables
+    soup = BeautifulSoup(html_content, 'html.parser')
+    for script in soup(["script", "style", "noscript", "header", "footer", "nav"]):
+        script.extract()
+    text = soup.get_text(separator='\n', strip=True)
+    
+    # Clean up excessive newlines
+    lines = [line.strip() for line in text.splitlines() if line.strip()]
+    text = '\n'.join(lines)
     
     if not text:
-        # Fallback to BeautifulSoup
-        soup = BeautifulSoup(html_content, 'html.parser')
-        # Remove script and style elements
-        for script in soup(["script", "style"]):
-            script.extract()
-        text = soup.get_text(separator=' ', strip=True)
+        # Fallback to trafilatura
+        text = trafilatura.extract(html_content, include_comments=False, include_tables=True, no_fallback=False)
         
     return text if text else None
