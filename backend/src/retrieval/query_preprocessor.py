@@ -10,11 +10,18 @@ def preprocess_query(query: str, current_scheme: Optional[str] = None) -> Tuple[
     
     # Wait until after alias map check to see if we detected a scheme
     detected_scheme = None
+    matched_alias = None
     for alias, canonical in ALIAS_MAP.items():
         if alias in query_lower:
             detected_scheme = canonical
+            matched_alias = alias
             break
             
+    # Remove the matched alias from the query to improve TF-IDF retrieval accuracy
+    normalized_query = query_lower
+    if matched_alias:
+        normalized_query = normalized_query.replace(matched_alias, "").strip()
+
     # Fallback to the context's current scheme if not explicitly mentioned
     if not detected_scheme and current_scheme:
         detected_scheme = current_scheme
@@ -23,6 +30,6 @@ def preprocess_query(query: str, current_scheme: Optional[str] = None) -> Tuple[
     if not detected_scheme:
         ambiguous_terms = ["nav of", "nav", "expense ratio of", "exit load for", "exit load", "fund manager of", "return of", "return", "aum", "riskometer", "risk"]
         if any(term in query_lower for term in ambiguous_terms) or "this" in query_lower:
-            return query, None, "Could you please specify which mutual fund you want this information for?"
+            return normalized_query, None, "Could you please specify which mutual fund you want this information for?"
         
-    return query, detected_scheme, None
+    return normalized_query, detected_scheme, None
