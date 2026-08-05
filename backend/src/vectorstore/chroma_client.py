@@ -1,19 +1,12 @@
-from chromadb.api.types import EmbeddingFunction, Documents, Embeddings
-import hashlib
 import chromadb
 from chromadb.config import Settings
 import yaml
 from typing import Dict, Any
 import os
+from chromadb.utils import embedding_functions
 
-class DummyEmbeddingFunction(EmbeddingFunction):
-    def __call__(self, input: Documents) -> Embeddings:
-        embeddings = []
-        for text in input:
-            h = int(hashlib.md5(text.encode('utf-8')).hexdigest(), 16)
-            vec = [float((h >> (i % 64)) & 1) for i in range(384)]
-            embeddings.append(vec)
-        return embeddings
+def get_embedding_function():
+    return embedding_functions.DefaultEmbeddingFunction()
 
 def get_config() -> Dict[str, Any]:
     config_path = 'config.yaml'
@@ -32,7 +25,7 @@ def get_chroma_client():
     return client
 
 def get_collection(client):
-    embedding_fn = DummyEmbeddingFunction()
+    embedding_fn = get_embedding_function()
     collection = client.get_or_create_collection(
         name="groww_rag_collection",
         embedding_function=embedding_fn

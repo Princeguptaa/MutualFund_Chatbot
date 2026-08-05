@@ -15,8 +15,6 @@ def load_sources(filepath: str) -> List[Dict[str, Any]]:
     with open(filepath, 'r') as f:
         return json.load(f)
 
-fallback_data = []
-
 async def process_source(source, collection, chunk_size, chunk_overlap, semaphore, browser_context: BrowserContext):
     async with semaphore:
         url = source["url"]
@@ -72,14 +70,6 @@ async def process_source(source, collection, chunk_size, chunk_overlap, semaphor
                 print(f"Upserted {len(ids)} chunks to ChromaDB for {url}")
             except Exception as e:
                 print(f"ChromaDB upsert failed for {url}: {e}")
-            
-            # Save to fallback
-            for i, chunk in enumerate(chunks):
-                fallback_data.append({
-                    "id": ids[i],
-                    "text": documents[i],
-                    "metadata": metadatas[i]
-                })
 
 async def run_ingestion():
     config = get_config()
@@ -109,10 +99,7 @@ async def run_ingestion():
         await asyncio.gather(*tasks)
         await browser.close()
     
-    fallback_path = os.path.join(base_dir, "data", "fallback_docs.json")
-    with open(fallback_path, 'w', encoding='utf-8') as f:
-        json.dump(fallback_data, f, ensure_ascii=False, indent=2)
-    print(f"Saved {len(fallback_data)} chunks to fallback JSON at {fallback_path}.")
+    print("Ingestion pipeline completed.")
             
     print("Ingestion pipeline completed.")
 

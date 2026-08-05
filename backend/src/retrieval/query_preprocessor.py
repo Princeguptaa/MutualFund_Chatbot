@@ -17,10 +17,11 @@ def preprocess_query(query: str, current_scheme: Optional[str] = None) -> Tuple[
             matched_alias = alias
             break
             
-    # Remove the matched alias from the query to improve TF-IDF retrieval accuracy
+    # Replace the matched alias with the canonical name to improve semantic retrieval
     normalized_query = query_lower
-    if matched_alias:
-        normalized_query = normalized_query.replace(matched_alias, "").strip()
+    if matched_alias and detected_scheme:
+        # e.g., if alias is "sbi small cap" and canonical is "SBI Small Cap Fund", we put that in the query
+        normalized_query = normalized_query.replace(matched_alias, detected_scheme.lower()).strip()
 
     # Fallback to the context's current scheme if not explicitly mentioned
     if not detected_scheme and current_scheme:

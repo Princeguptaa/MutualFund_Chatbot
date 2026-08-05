@@ -19,19 +19,28 @@ def rewrite_query(query: str, history: List[Dict[str, str]]) -> str:
             history_text += f"{role.capitalize()}: {text}\n"
 
     system_prompt = (
-        "You are an assistant that rewrites follow-up questions to be standalone queries.\n"
-        "Given the following chat history and a new user query, rewrite the query to be standalone, "
-        "replacing any pronouns or contextual references (like 'it', 'this fund', 'that scheme') "
-        "with the specific mutual fund or topic being discussed.\n"
-        "If the query is already standalone or no specific context applies, return it exactly as is.\n"
+        "You are an expert AI assistant that rewrites follow-up questions to be standalone queries.\n"
+        "Given the chat history and a new user query, rewrite the query to be standalone, "
+        "replacing pronouns or contextual references (like 'it', 'this fund', 'that scheme') "
+        "with the specific mutual fund or topic being discussed.\n\n"
+        "EXAMPLES:\n"
+        "History: User: What is the NAV of SBI Small Cap?\nAssistant: The NAV is 145.\n"
+        "New Query: What is its expense ratio?\n"
+        "Rewritten Query: What is the expense ratio of SBI Small Cap?\n\n"
+        "History: User: Tell me about HDFC Flexi Cap.\nAssistant: It is a good fund.\n"
+        "New Query: who manages it?\n"
+        "Rewritten Query: Who manages HDFC Flexi Cap?\n\n"
         "IMPORTANT: Respond with ONLY the rewritten query text. Do not include any explanations, quotes, or conversational filler."
     )
 
-    prompt = f"{system_prompt}\n\nChat History:\n{history_text}\nNew Query: {query}\n\nRewritten Query:"
+    prompt = f"Chat History:\n{history_text}\nNew Query: {query}\n\nRewritten Query:"
 
     try:
         chat_completion = client.chat.completions.create(
-            messages=[{"role": "user", "content": prompt}],
+            messages=[
+                {"role": "system", "content": system_prompt},
+                {"role": "user", "content": prompt}
+            ],
             model="llama-3.1-8b-instant",
             temperature=0.0,
             max_tokens=100,
