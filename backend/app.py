@@ -115,12 +115,18 @@ if query or "example_query" in st.session_state:
                             stream = generate_answer_stream(prompt)
                             raw_answer = ""
                             
+                            import time
+                            last_update_time = time.time()
+                            
                             # stream display
                             with st.chat_message("assistant", avatar="https://upload.wikimedia.org/wikipedia/commons/4/4b/Groww_app_logo.png"):
                                 response_placeholder = st.empty()
                                 for chunk in stream:
                                     raw_answer += chunk
-                                    response_placeholder.markdown(raw_answer + "▌")
+                                    # Update UI max 20 times per second to prevent WebSocket lag
+                                    if time.time() - last_update_time > 0.05:
+                                        response_placeholder.markdown(raw_answer + "▌")
+                                        last_update_time = time.time()
                                 
                                 # 8 & 9. Format and Validate
                                 final_response = format_response(raw_answer, resolved_chunks)
